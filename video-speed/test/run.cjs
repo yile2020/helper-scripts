@@ -81,7 +81,7 @@ async function serveWav(route) {
         eq(meta.license, ['MIT'])
         assert(/^\d{4}\.\d{2}\.\d{2}\.\d+$/.test(meta.version[0]), 'version 格式：' + meta.version)
         assert(meta['name:en'] && meta['description:en'], '缺英文 name/description')
-        const raw = 'https://raw.githubusercontent.com/yilecoding/helper-scripts/main/video-speed/video-speed.user.js'
+        const raw = 'https://raw.githubusercontent.com/yile2020/helper-scripts/main/video-speed/video-speed.user.js'
         eq(meta.updateURL, [raw])
         eq(meta.downloadURL, [raw])
         assert(!meta.require, '不应 @require 外部脚本')

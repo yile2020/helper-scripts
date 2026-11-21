@@ -4,7 +4,7 @@
 
 **25 个实用油猴脚本：自动刷课连播、阅读增强、去广告弹窗、解除复制限制、一键导出……装上就能用。**
 
-[![GitHub stars](https://img.shields.io/github/stars/yilecoding/helper-scripts?style=social)](https://github.com/yilecoding/helper-scripts/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/yile2020/helper-scripts?style=social)](https://github.com/yile2020/helper-scripts/stargazers)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 ![Scripts](https://img.shields.io/badge/scripts-25-brightgreen.svg)
 ![Tampermonkey](https://img.shields.io/badge/Tampermonkey-ready-00485B.svg)
@@ -47,7 +47,7 @@
 
 > 贵州省网络研修平台（`www.gzwy.gov.cn`）· 专题课程播放完成后切换到专题列表中的下一门，可选后台保活
 >
-> **[👉 安装脚本](https://raw.githubusercontent.com/yilecoding/helper-scripts/main/gzwy-course-autonext/gzwy-course-autonext.user.js)** · [调研与使用说明](./gzwy-course-autonext/notes.md)
+> **[👉 安装脚本](https://raw.githubusercontent.com/yile2020/helper-scripts/main/gzwy-course-autonext/gzwy-course-autonext.user.js)** · [调研与使用说明](./gzwy-course-autonext/notes.md)
 >
 > 在专题页点「开始学习第一门未完成课程」；之后专题页会盯着课程进度，平台把当前课程记满 100% 就通过原生入口打开下一门。默认关闭；考试、直播等非课程项目由用户按平台要求完成。
 >
@@ -57,7 +57,7 @@
 
 > 国家中小学智慧教育平台（`basic.smartedu.cn`）· 2026 年「暑期教师研修」专题（基础教育）· **本仓库使用人数最多的脚本**
 >
-> **[👉 点击安装](https://raw.githubusercontent.com/yilecoding/helper-scripts/main/smartedu-2026-basic/smartedu-2026-basic.user.js)** · [平台调研与开发笔记](./smartedu-2026-basic/notes.md)
+> **[👉 点击安装](https://raw.githubusercontent.com/yile2020/helper-scripts/main/smartedu-2026-basic/smartedu-2026-basic.user.js)** · [平台调研与开发笔记](./smartedu-2026-basic/notes.md)
 
 **能做什么**
 
@@ -87,49 +87,49 @@
 
 | 脚本 | 做什么 | |
 |---|---|---|
-| **文章自动目录**<br>`article-toc` | 给长文章生成浮动目录，滚动时高亮当前章节，点击跳转时避开吸顶导航栏；顶部阅读进度条，可拖动、可折叠，支持单页应用 | [安装](https://raw.githubusercontent.com/yilecoding/helper-scripts/main/article-toc/article-toc.user.js) · [笔记](./article-toc/notes.md) |
-| **阅读位置记忆**<br>`scroll-memory` | 长文、小说、文档读到一半关掉，回来时回到上次读到的地方。按段落而不是像素记位置，图片懒加载后也不会跑偏；附回到顶部 / 底部按钮和阅读进度 | [安装](https://raw.githubusercontent.com/yilecoding/helper-scripts/main/scroll-memory/scroll-memory.user.js) · [笔记](./scroll-memory/notes.md) |
-| **通用暗色模式**<br>`dark-mode` | 任意网站一键变暗，页面加载前注入，不闪白；自动识别本来就是暗色的网站；可按站点开关、跟随系统或定时切换。快捷键 `Alt+Shift+D` | [安装](https://raw.githubusercontent.com/yilecoding/helper-scripts/main/dark-mode/dark-mode.user.js) · [笔记](./dark-mode/notes.md) |
-| **自动翻页**<br>`auto-pager` | 论坛、搜索结果、文章列表滚到底自动加载下一页并拼在后面；自动识别「下一页」，老论坛 GBK 编码不乱码，失败可重试 | [安装](https://raw.githubusercontent.com/yilecoding/helper-scripts/main/auto-pager/auto-pager.user.js) · [笔记](./auto-pager/notes.md) |
-| **划词翻译**<br>`translate-selection` | 选中文字就能翻译，中英自动互译，单词显示词典释义，可朗读；Google 接口失败时自动换用备用接口。快捷键 `Alt+T` | [安装](https://raw.githubusercontent.com/yilecoding/helper-scripts/main/translate-selection/translate-selection.user.js) · [笔记](./translate-selection/notes.md) |
-| **中英文自动加空格**<br>`pangu-spacing` | 在中文和英文、数字之间自动加空格（盘古之白），不破坏网址、版本号、`C++`、`100%` 这类内容 | [安装](https://raw.githubusercontent.com/yilecoding/helper-scripts/main/pangu-spacing/pangu-spacing.user.js) · [笔记](./pangu-spacing/notes.md) |
+| **文章自动目录**<br>`article-toc` | 给长文章生成浮动目录，滚动时高亮当前章节，点击跳转时避开吸顶导航栏；顶部阅读进度条，可拖动、可折叠，支持单页应用 | [安装](https://raw.githubusercontent.com/yile2020/helper-scripts/main/article-toc/article-toc.user.js) · [笔记](./article-toc/notes.md) |
+| **阅读位置记忆**<br>`scroll-memory` | 长文、小说、文档读到一半关掉，回来时回到上次读到的地方。按段落而不是像素记位置，图片懒加载后也不会跑偏；附回到顶部 / 底部按钮和阅读进度 | [安装](https://raw.githubusercontent.com/yile2020/helper-scripts/main/scroll-memory/scroll-memory.user.js) · [笔记](./scroll-memory/notes.md) |
+| **通用暗色模式**<br>`dark-mode` | 任意网站一键变暗，页面加载前注入，不闪白；自动识别本来就是暗色的网站；可按站点开关、跟随系统或定时切换。快捷键 `Alt+Shift+D` | [安装](https://raw.githubusercontent.com/yile2020/helper-scripts/main/dark-mode/dark-mode.user.js) · [笔记](./dark-mode/notes.md) |
+| **自动翻页**<br>`auto-pager` | 论坛、搜索结果、文章列表滚到底自动加载下一页并拼在后面；自动识别「下一页」，老论坛 GBK 编码不乱码，失败可重试 | [安装](https://raw.githubusercontent.com/yile2020/helper-scripts/main/auto-pager/auto-pager.user.js) · [笔记](./auto-pager/notes.md) |
+| **划词翻译**<br>`translate-selection` | 选中文字就能翻译，中英自动互译，单词显示词典释义，可朗读；Google 接口失败时自动换用备用接口。快捷键 `Alt+T` | [安装](https://raw.githubusercontent.com/yile2020/helper-scripts/main/translate-selection/translate-selection.user.js) · [笔记](./translate-selection/notes.md) |
+| **中英文自动加空格**<br>`pangu-spacing` | 在中文和英文、数字之间自动加空格（盘古之白），不破坏网址、版本号、`C++`、`100%` 这类内容 | [安装](https://raw.githubusercontent.com/yile2020/helper-scripts/main/pangu-spacing/pangu-spacing.user.js) · [笔记](./pangu-spacing/notes.md) |
 
 ### 去干扰与解除限制
 
 | 脚本 | 做什么 | |
 |---|---|---|
-| **网页复制限制解除**<br>`copy-unlock` | 解除禁止选中、禁止右键、复制后追加版权尾巴；CSDN 代码块免登录复制；按站点开关 | [安装](https://raw.githubusercontent.com/yilecoding/helper-scripts/main/copy-unlock/copy-unlock.user.js) · [笔记](./copy-unlock/notes.md) |
-| **外链直达**<br>`link-direct` | 跳过知乎、掘金、CSDN、简书、QQ、Steam 等二十多个网站的「即将离开」中转页，可选去掉 utm 追踪参数 | [安装](https://raw.githubusercontent.com/yilecoding/helper-scripts/main/link-direct/link-direct.user.js) · [笔记](./link-direct/notes.md) |
-| **弹窗遮罩清理**<br>`overlay-killer` | Cookie 同意弹窗优先点「拒绝」；隐藏「打开 App」「登录后查看」遮罩并恢复滚动；展开「阅读全文」折叠。不误伤视频全屏和你自己打开的对话框 | [安装](https://raw.githubusercontent.com/yilecoding/helper-scripts/main/overlay-killer/overlay-killer.user.js) · [笔记](./overlay-killer/notes.md) |
-| **网页元素屏蔽**<br>`element-hider` | 点选广告、浮窗、推荐栏一键隐藏，按站点记住，页面加载时就隐藏不闪烁；可撤销，可导入导出规则 | [安装](https://raw.githubusercontent.com/yilecoding/helper-scripts/main/element-hider/element-hider.user.js) · [笔记](./element-hider/notes.md) |
+| **网页复制限制解除**<br>`copy-unlock` | 解除禁止选中、禁止右键、复制后追加版权尾巴；CSDN 代码块免登录复制；按站点开关 | [安装](https://raw.githubusercontent.com/yile2020/helper-scripts/main/copy-unlock/copy-unlock.user.js) · [笔记](./copy-unlock/notes.md) |
+| **外链直达**<br>`link-direct` | 跳过知乎、掘金、CSDN、简书、QQ、Steam 等二十多个网站的「即将离开」中转页，可选去掉 utm 追踪参数 | [安装](https://raw.githubusercontent.com/yile2020/helper-scripts/main/link-direct/link-direct.user.js) · [笔记](./link-direct/notes.md) |
+| **弹窗遮罩清理**<br>`overlay-killer` | Cookie 同意弹窗优先点「拒绝」；隐藏「打开 App」「登录后查看」遮罩并恢复滚动；展开「阅读全文」折叠。不误伤视频全屏和你自己打开的对话框 | [安装](https://raw.githubusercontent.com/yile2020/helper-scripts/main/overlay-killer/overlay-killer.user.js) · [笔记](./overlay-killer/notes.md) |
+| **网页元素屏蔽**<br>`element-hider` | 点选广告、浮窗、推荐栏一键隐藏，按站点记住，页面加载时就隐藏不闪烁；可撤销，可导入导出规则 | [安装](https://raw.githubusercontent.com/yile2020/helper-scripts/main/element-hider/element-hider.user.js) · [笔记](./element-hider/notes.md) |
 
 ### 导出与下载
 
 | 脚本 | 做什么 | |
 |---|---|---|
-| **网页正文转 Markdown**<br>`page-to-markdown` | 自动识别文章正文，转成干净的 Markdown（表格、代码块、嵌套列表都支持），复制或下载；识别不准时可以手动选区 | [安装](https://raw.githubusercontent.com/yilecoding/helper-scripts/main/page-to-markdown/page-to-markdown.user.js) · [笔记](./page-to-markdown/notes.md) |
-| **网页表格导出**<br>`table-export` | 鼠标移到表格上即可复制（直接粘进 Excel）或下载 CSV / JSON / Markdown；正确展开合并单元格，CSV 用 Excel 打开不乱码 | [安装](https://raw.githubusercontent.com/yilecoding/helper-scripts/main/table-export/table-export.user.js) · [笔记](./table-export/notes.md) |
-| **图片查看与批量下载**<br>`image-gallery` | 收集页面所有图片（自动取最大尺寸，包括懒加载图和背景图），网格浏览、放大旋转，勾选批量下载。快捷键 `Alt+Shift+I` | [安装](https://raw.githubusercontent.com/yilecoding/helper-scripts/main/image-gallery/image-gallery.user.js) · [笔记](./image-gallery/notes.md) |
-| **页面二维码**<br>`qr-code` | 把当前网址、选中的文字或链接变成二维码，手机一扫就打开；可下载或复制图片，不依赖外部库。快捷键 `Alt+Q` | [安装](https://raw.githubusercontent.com/yilecoding/helper-scripts/main/qr-code/qr-code.user.js) · [笔记](./qr-code/notes.md) |
+| **网页正文转 Markdown**<br>`page-to-markdown` | 自动识别文章正文，转成干净的 Markdown（表格、代码块、嵌套列表都支持），复制或下载；识别不准时可以手动选区 | [安装](https://raw.githubusercontent.com/yile2020/helper-scripts/main/page-to-markdown/page-to-markdown.user.js) · [笔记](./page-to-markdown/notes.md) |
+| **网页表格导出**<br>`table-export` | 鼠标移到表格上即可复制（直接粘进 Excel）或下载 CSV / JSON / Markdown；正确展开合并单元格，CSV 用 Excel 打开不乱码 | [安装](https://raw.githubusercontent.com/yile2020/helper-scripts/main/table-export/table-export.user.js) · [笔记](./table-export/notes.md) |
+| **图片查看与批量下载**<br>`image-gallery` | 收集页面所有图片（自动取最大尺寸，包括懒加载图和背景图），网格浏览、放大旋转，勾选批量下载。快捷键 `Alt+Shift+I` | [安装](https://raw.githubusercontent.com/yile2020/helper-scripts/main/image-gallery/image-gallery.user.js) · [笔记](./image-gallery/notes.md) |
+| **页面二维码**<br>`qr-code` | 把当前网址、选中的文字或链接变成二维码，手机一扫就打开；可下载或复制图片，不依赖外部库。快捷键 `Alt+Q` | [安装](https://raw.githubusercontent.com/yile2020/helper-scripts/main/qr-code/qr-code.user.js) · [笔记](./qr-code/notes.md) |
 
 ### 搜索与浏览效率
 
 | 脚本 | 做什么 | |
 |---|---|---|
-| **搜索引擎一键切换**<br>`search-switcher` | 在搜索结果页带着同一个关键词，一键切到百度、Google、Bing、GitHub、知乎、B 站等，引擎列表可自定义 | [安装](https://raw.githubusercontent.com/yilecoding/helper-scripts/main/search-switcher/search-switcher.user.js) · [笔记](./search-switcher/notes.md) |
-| **以图搜图**<br>`image-search` | 按住 `Alt` 右键点图片（或悬停按 `S`），用 Google Lens、Bing、百度、SauceNAO 等反查；本地和内网图片自动改为上传 | [安装](https://raw.githubusercontent.com/yilecoding/helper-scripts/main/image-search/image-search.user.js) · [笔记](./image-search/notes.md) |
-| **键盘浏览**<br>`keyboard-nav` | Vimium 风格：`j`/`k` 滚动、`f` 显示链接提示后按字母打开、`H`/`L` 后退前进；在输入框里不拦截按键，按 `?` 查看全部快捷键 | [安装](https://raw.githubusercontent.com/yilecoding/helper-scripts/main/keyboard-nav/keyboard-nav.user.js) · [笔记](./keyboard-nav/notes.md) |
-| **GitHub 增强**<br>`github-enhancer` | 显示仓库大小和创建时间；单个文件一键下载；复制 raw 链接、带行号的永久链接；「3 天前」旁边显示具体时间 | [安装](https://raw.githubusercontent.com/yilecoding/helper-scripts/main/github-enhancer/github-enhancer.user.js) · [笔记](./github-enhancer/notes.md) |
+| **搜索引擎一键切换**<br>`search-switcher` | 在搜索结果页带着同一个关键词，一键切到百度、Google、Bing、GitHub、知乎、B 站等，引擎列表可自定义 | [安装](https://raw.githubusercontent.com/yile2020/helper-scripts/main/search-switcher/search-switcher.user.js) · [笔记](./search-switcher/notes.md) |
+| **以图搜图**<br>`image-search` | 按住 `Alt` 右键点图片（或悬停按 `S`），用 Google Lens、Bing、百度、SauceNAO 等反查；本地和内网图片自动改为上传 | [安装](https://raw.githubusercontent.com/yile2020/helper-scripts/main/image-search/image-search.user.js) · [笔记](./image-search/notes.md) |
+| **键盘浏览**<br>`keyboard-nav` | Vimium 风格：`j`/`k` 滚动、`f` 显示链接提示后按字母打开、`H`/`L` 后退前进；在输入框里不拦截按键，按 `?` 查看全部快捷键 | [安装](https://raw.githubusercontent.com/yile2020/helper-scripts/main/keyboard-nav/keyboard-nav.user.js) · [笔记](./keyboard-nav/notes.md) |
+| **GitHub 增强**<br>`github-enhancer` | 显示仓库大小和创建时间；单个文件一键下载；复制 raw 链接、带行号的永久链接；「3 天前」旁边显示具体时间 | [安装](https://raw.githubusercontent.com/yile2020/helper-scripts/main/github-enhancer/github-enhancer.user.js) · [笔记](./github-enhancer/notes.md) |
 
 ### 实用工具
 
 | 脚本 | 做什么 | |
 |---|---|---|
-| **通用视频倍速**<br>`video-speed` | 任意网站的视频都能用快捷键调速：`Z` 减速、`X` 加速、`R` 恢复 1 倍、`G` 切到常用倍速、`Q`/`E` 快退快进；按站点记住倍速，网站把倍速重置时自动恢复 | [安装](https://raw.githubusercontent.com/yilecoding/helper-scripts/main/video-speed/video-speed.user.js) · [笔记](./video-speed/notes.md) |
-| **表单草稿自动保存**<br>`form-saver` | 评论、工单、帖子写到一半误关页面，回来一键恢复；不保存密码、卡号、验证码；草稿 7 天后自动清除 | [安装](https://raw.githubusercontent.com/yilecoding/helper-scripts/main/form-saver/form-saver.user.js) · [笔记](./form-saver/notes.md) |
-| **网页变化监控**<br>`page-monitor` | 选中页面上一块区域（价格、库存、公告、成绩），定时检查，内容变化或达到价格阈值时通知你，并标出具体改了什么 | [安装](https://raw.githubusercontent.com/yilecoding/helper-scripts/main/page-monitor/page-monitor.user.js) · [笔记](./page-monitor/notes.md) |
-| **百度网盘分享批量转存**<br>`baidu-share-dedupe` | 在分享页把整个文件夹转存到自己的网盘：非会员自动拆成每批 500 个，先和目标文件夹按文件名 + 大小核对，已有的跳过；每批确认到齐再继续，中途停了重新扫描就能续跑 | [安装](https://raw.githubusercontent.com/yilecoding/helper-scripts/main/baidu-share-dedupe/baidu-share-dedupe.user.js) · [笔记](./baidu-share-dedupe/notes.md) |
-| **网站使用时长统计**<br>`site-timer` | 只统计真正在用的时间，多个标签页不重复计算；可给网站设每日上限，超时全屏提醒；看今天和近 7 天排行，导出 CSV | [安装](https://raw.githubusercontent.com/yilecoding/helper-scripts/main/site-timer/site-timer.user.js) · [笔记](./site-timer/notes.md) |
+| **通用视频倍速**<br>`video-speed` | 任意网站的视频都能用快捷键调速：`Z` 减速、`X` 加速、`R` 恢复 1 倍、`G` 切到常用倍速、`Q`/`E` 快退快进；按站点记住倍速，网站把倍速重置时自动恢复 | [安装](https://raw.githubusercontent.com/yile2020/helper-scripts/main/video-speed/video-speed.user.js) · [笔记](./video-speed/notes.md) |
+| **表单草稿自动保存**<br>`form-saver` | 评论、工单、帖子写到一半误关页面，回来一键恢复；不保存密码、卡号、验证码；草稿 7 天后自动清除 | [安装](https://raw.githubusercontent.com/yile2020/helper-scripts/main/form-saver/form-saver.user.js) · [笔记](./form-saver/notes.md) |
+| **网页变化监控**<br>`page-monitor` | 选中页面上一块区域（价格、库存、公告、成绩），定时检查，内容变化或达到价格阈值时通知你，并标出具体改了什么 | [安装](https://raw.githubusercontent.com/yile2020/helper-scripts/main/page-monitor/page-monitor.user.js) · [笔记](./page-monitor/notes.md) |
+| **百度网盘分享批量转存**<br>`baidu-share-dedupe` | 在分享页把整个文件夹转存到自己的网盘：非会员自动拆成每批 500 个，先和目标文件夹按文件名 + 大小核对，已有的跳过；每批确认到齐再继续，中途停了重新扫描就能续跑 | [安装](https://raw.githubusercontent.com/yile2020/helper-scripts/main/baidu-share-dedupe/baidu-share-dedupe.user.js) · [笔记](./baidu-share-dedupe/notes.md) |
+| **网站使用时长统计**<br>`site-timer` | 只统计真正在用的时间，多个标签页不重复计算；可给网站设每日上限，超时全屏提醒；看今天和近 7 天排行，导出 CSV | [安装](https://raw.githubusercontent.com/yile2020/helper-scripts/main/site-timer/site-timer.user.js) · [笔记](./site-timer/notes.md) |
 
 ## 常见问题
 
@@ -140,7 +140,7 @@
 不用管。每个脚本都声明了更新地址，Tampermonkey 会定期自动检查。想马上更新，可以在 Tampermonkey 管理面板里点「检查更新」。
 
 **某个网站被脚本弄乱了？**
-大部分通用脚本在 Tampermonkey 菜单里都有「本站停用」，点一下即可，其他网站不受影响。也欢迎 [提 Issue](https://github.com/yilecoding/helper-scripts/issues) 告诉我是哪个网站。
+大部分通用脚本在 Tampermonkey 菜单里都有「本站停用」，点一下即可，其他网站不受影响。也欢迎 [提 Issue](https://github.com/yile2020/helper-scripts/issues) 告诉我是哪个网站。
 
 **脚本会收集我的数据吗？**
 不会。所有设置和记录都只存在你本机的 Tampermonkey 里，没有任何统计或上报。脚本发出的网络请求只有两类：
@@ -170,7 +170,7 @@ NODE_PATH=/path/to/node_modules node <script-name>/test/run.cjs
 
 ## 反馈与支持
 
-- 遇到问题或有新需求：[提交 Issue](https://github.com/yilecoding/helper-scripts/issues)
+- 遇到问题或有新需求：[提交 Issue](https://github.com/yile2020/helper-scripts/issues)
 - 觉得好用的话，点个 ⭐ Star 支持一下，Watch 仓库可以第一时间收到更新。
 
 ## 许可证与声明

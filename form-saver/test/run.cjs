@@ -71,7 +71,7 @@ async function main() {
             t.assert(meta[k], '缺少 @' + k)
         }
         t.assert(/^\d{4}\.\d{2}\.\d{2}\.\d+$/.test(meta.version[0]), '版本号格式')
-        t.eq(meta.updateURL[0], 'https://raw.githubusercontent.com/yilecoding/helper-scripts/main/form-saver/form-saver.user.js')
+        t.eq(meta.updateURL[0], 'https://raw.githubusercontent.com/yile2020/helper-scripts/main/form-saver/form-saver.user.js')
         t.eq(meta.downloadURL[0], meta.updateURL[0])
     })
 

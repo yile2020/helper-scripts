@@ -17,10 +17,10 @@
 // @grant        GM_setValue
 // @grant        unsafeWindow
 // @license      MIT
-// @homepageURL  https://github.com/yilecoding/helper-scripts
-// @supportURL   https://github.com/yilecoding/helper-scripts/issues
-// @updateURL    https://raw.githubusercontent.com/yilecoding/helper-scripts/main/gzwy-course-autonext/gzwy-course-autonext.user.js
-// @downloadURL  https://raw.githubusercontent.com/yilecoding/helper-scripts/main/gzwy-course-autonext/gzwy-course-autonext.user.js
+// @homepageURL  https://github.com/yile2020/helper-scripts
+// @supportURL   https://github.com/yile2020/helper-scripts/issues
+// @updateURL    https://raw.githubusercontent.com/yile2020/helper-scripts/main/gzwy-course-autonext/gzwy-course-autonext.user.js
+// @downloadURL  https://raw.githubusercontent.com/yile2020/helper-scripts/main/gzwy-course-autonext/gzwy-course-autonext.user.js
 // @run-at       document-idle
 // ==/UserScript==
 

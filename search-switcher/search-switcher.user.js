@@ -43,14 +43,14 @@
 // @license      MIT
 // @run-at       document-end
 // @noframes
-// @homepageURL  https://github.com/yilecoding/helper-scripts
-// @supportURL   https://github.com/yilecoding/helper-scripts/issues
-// @updateURL    https://raw.githubusercontent.com/yilecoding/helper-scripts/main/search-switcher/search-switcher.user.js
-// @downloadURL  https://raw.githubusercontent.com/yilecoding/helper-scripts/main/search-switcher/search-switcher.user.js
+// @homepageURL  https://github.com/yile2020/helper-scripts
+// @supportURL   https://github.com/yile2020/helper-scripts/issues
+// @updateURL    https://raw.githubusercontent.com/yile2020/helper-scripts/main/search-switcher/search-switcher.user.js
+// @downloadURL  https://raw.githubusercontent.com/yile2020/helper-scripts/main/search-switcher/search-switcher.user.js
 // ==/UserScript==
 
 // 脚本持续更新维护，欢迎 star / watch 仓库获取最新版本：
-// https://github.com/yilecoding/helper-scripts
+// https://github.com/yile2020/helper-scripts
 
 (function () {
     'use strict';

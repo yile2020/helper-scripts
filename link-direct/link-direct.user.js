@@ -16,14 +16,14 @@
 // @grant        unsafeWindow
 // @license      MIT
 // @run-at       document-start
-// @homepageURL  https://github.com/yilecoding/helper-scripts
-// @supportURL   https://github.com/yilecoding/helper-scripts/issues
-// @updateURL    https://raw.githubusercontent.com/yilecoding/helper-scripts/main/link-direct/link-direct.user.js
-// @downloadURL  https://raw.githubusercontent.com/yilecoding/helper-scripts/main/link-direct/link-direct.user.js
+// @homepageURL  https://github.com/yile2020/helper-scripts
+// @supportURL   https://github.com/yile2020/helper-scripts/issues
+// @updateURL    https://raw.githubusercontent.com/yile2020/helper-scripts/main/link-direct/link-direct.user.js
+// @downloadURL  https://raw.githubusercontent.com/yile2020/helper-scripts/main/link-direct/link-direct.user.js
 // ==/UserScript==
 
 // 脚本持续更新维护，欢迎 star / watch 仓库获取最新版本：
-// https://github.com/yilecoding/helper-scripts
+// https://github.com/yile2020/helper-scripts
 
 (function () {
     'use strict';

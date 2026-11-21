@@ -165,7 +165,7 @@ async function main() {
         t.eq(meta.namespace[0], 'https://github.com/yilecoding/helper-scripts')
         t.eq(meta.author[0], '壹樂（V：ita1125）')
         t.eq(meta.license[0], 'MIT')
-        t.eq(meta.updateURL[0], 'https://raw.githubusercontent.com/yilecoding/helper-scripts/main/site-timer/site-timer.user.js')
+        t.eq(meta.updateURL[0], 'https://raw.githubusercontent.com/yile2020/helper-scripts/main/site-timer/site-timer.user.js')
         t.eq(meta.downloadURL[0], meta.updateURL[0])
         t.assert(!/@require/.test(fs.readFileSync(SCRIPT, 'utf8')), '不能 @require 外部脚本')
     })

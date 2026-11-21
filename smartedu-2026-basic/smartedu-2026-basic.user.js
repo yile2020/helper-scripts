@@ -15,14 +15,14 @@
 // @grant        GM_deleteValue
 // @license      MIT
 // @run-at       document-start
-// @homepageURL  https://github.com/yilecoding/helper-scripts
-// @supportURL   https://github.com/yilecoding/helper-scripts/issues
-// @updateURL    https://raw.githubusercontent.com/yilecoding/helper-scripts/main/smartedu-2026-basic/smartedu-2026-basic.user.js
-// @downloadURL  https://raw.githubusercontent.com/yilecoding/helper-scripts/main/smartedu-2026-basic/smartedu-2026-basic.user.js
+// @homepageURL  https://github.com/yile2020/helper-scripts
+// @supportURL   https://github.com/yile2020/helper-scripts/issues
+// @updateURL    https://raw.githubusercontent.com/yile2020/helper-scripts/main/smartedu-2026-basic/smartedu-2026-basic.user.js
+// @downloadURL  https://raw.githubusercontent.com/yile2020/helper-scripts/main/smartedu-2026-basic/smartedu-2026-basic.user.js
 // ==/UserScript==
 
 // 脚本持续更新维护，欢迎 star / watch 仓库获取最新版本：
-// https://github.com/yilecoding/helper-scripts
+// https://github.com/yile2020/helper-scripts
 // Tampermonkey 已通过上方 @updateURL 自动检查更新，无需手动操作。
 
 /*
@@ -915,7 +915,7 @@
     };
 
     /** 脚本仓库，面板里放个入口方便用户 Star / Watch 关注更新。 */
-    const REPO_URL = 'https://github.com/yilecoding/helper-scripts';
+    const REPO_URL = 'https://github.com/yile2020/helper-scripts';
 
     /** 面板：课程目录 + 控制 + 日志 */
     const Panel = (() => {
