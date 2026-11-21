@@ -200,8 +200,7 @@ slides.push((n) => frame({
 slides.push((n) => frame({
     n, step: '第 3 步', route: 'B', title: '从脚本猫安装（国内）',
     body: scAddr()
-        + shot('08a-scriptcat-home.png', { label: '认准网站：ScriptCat 脚本猫', w: 860 })
-        + shot('08b-scriptcat-page.png', { w: 960, h: 300, todo: '脚本猫上的研修助手页面（圈出安装按钮）' })
+        + shot('08b-scriptcat-page.png', { label: '① 认准脚本名和作者 yile2020 ② 点「安装脚本」', w: 960, h: 300, todo: '脚本猫上的研修助手页面（圈出安装按钮）' })
         + tips([
             '用上面的地址<b>直接打开</b>，别在站内搜：同类脚本很多，容易装错',
             `认准脚本名：<b>${NAME}</b>${SC_AUTHOR ? `，作者 <b>${esc(SC_AUTHOR)}</b>` : ''}`,

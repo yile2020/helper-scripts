@@ -119,11 +119,11 @@ function around(f, { top = 40, bottom = 40, height, x = 0, width = 1280 } = {}) 
     await mark(np, []);
 
     // ── 扩展商店：用真实 Edge / Chrome 的 UA 和品牌信息打开，避免出现「浏览器不兼容」「改用 Chrome」这类无头浏览器才有的提示 ──
-    async function storePage(brand) {
+    async function storePage(brand, width = 1280) {
         const ver = '142';
         const ua = `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/${ver}.0.0.0 Safari/537.36`
             + (brand === 'Microsoft Edge' ? ` Edg/${ver}.0.0.0` : '');
-        const c = await browser.newContext({ viewport: { width: 1280, height: 900 }, deviceScaleFactor: 2, locale: 'zh-CN', userAgent: ua });
+        const c = await browser.newContext({ viewport: { width, height: 1100 }, deviceScaleFactor: 2, locale: 'zh-CN', userAgent: ua });
         const p = await c.newPage();
         const cdp = await c.newCDPSession(p);
         await cdp.send('Emulation.setUserAgentOverride', {
@@ -192,6 +192,25 @@ function around(f, { top = 40, bottom = 40, height, x = 0, width = 1280 } = {}) 
         // 只截网站外观，不圈搜索框：站内搜「暑期教师研修」会出来很多同类脚本，教程让读者用直达链接
         await shoot(p, '08a-scriptcat-home', { x: 0, y: 0, width: 1280, height: 300 });
     } catch (e) { log.scriptcatError = String(e); }
+
+    // ── 脚本猫上的研修助手页面（未登录视角，和读者看到的一样）：圈出安装按钮 ──
+    try {
+        const p = await storePage('Microsoft Edge', 640); // 窄窗口：标题和安装按钮上下排列，放进图里字更大
+        await p.goto('https://scriptcat.org/zh-CN/script-show-page/9185', { waitUntil: 'networkidle', timeout: 60000 });
+        await p.waitForTimeout(2000);
+        await p.evaluate(() => { const b = document.querySelector('button[aria-label="Close"]'); if (b) b.click(); });
+        await p.waitForTimeout(400);
+        f = await mark(p, [
+            { sel: 'h1, h2, h3', text: '自动连播助手', pad: 6, badgePos: 'top' },
+            { sel: 'a, button', text: '安装脚本', pad: 6, badgePos: 'top' },
+        ]);
+        log.scriptcatPage = f;
+        if (f[0] && f[1]) {
+            const top = Math.max(0, Math.min(f[0].y, f[1].y) - 40);
+            const bottom = Math.max(f[0].y + f[0].h, f[1].y + f[1].h) + 12;
+            await shoot(p, '08b-scriptcat-page', { x: 0, y: top, width: 640, height: Math.min(700, bottom - top) });
+        }
+    } catch (e) { log.scriptcatPageError = String(e); }
 
     fs.writeFileSync(path.join(OUT, 'capture-log.json'), JSON.stringify(log, null, 2));
     console.log(JSON.stringify(log, null, 2));
