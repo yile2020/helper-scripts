@@ -1,0 +1,99 @@
+{
+  "repoUrl": "https://github.com/yile2020/helper-scripts",
+  "repoName": [
+    {
+      "text": "helper-scripts",
+      "x": 95.15625,
+      "y": 84,
+      "w": 104.59375,
+      "h": 32
+    }
+  ],
+  "toc": [
+    {
+      "text": "⭐ 2026 暑期教师研修自动连播助手",
+      "x": 113,
+      "y": 1985.171875,
+      "w": 256.484375,
+      "h": 17
+    },
+    {
+      "text": "快速开始",
+      "x": 81,
+      "y": 1905.171875,
+      "w": 64,
+      "h": 17
+    }
+  ],
+  "installLink": [
+    {
+      "text": "👉 点击安装",
+      "x": 69,
+      "y": 3124.328125,
+      "w": 88.453125,
+      "h": 17
+    }
+  ],
+  "04a-readme-edge-link": [
+    {
+      "text": "Edge",
+      "x": 481.65625,
+      "y": 2339.359375,
+      "w": 37.375,
+      "h": 17
+    }
+  ],
+  "05a-readme-chrome-link": [
+    {
+      "text": "Chrome",
+      "x": 410.53125,
+      "y": 2339.359375,
+      "w": 56.90625,
+      "h": 17
+    }
+  ],
+  "edgeStore": {
+    "url": "https://microsoftedge.microsoft.com/addons/detail/%E7%AF%A1%E6%94%B9%E7%8C%B4/iikmkjmpaadaobahmlepeloendndfphd?hl=zh-CN",
+    "button": [
+      {
+        "text": "获取",
+        "x": 968.328125,
+        "y": 95,
+        "w": 100,
+        "h": 32
+      }
+    ],
+    "warnings": [
+      "不兼容"
+    ]
+  },
+  "chromeStore": {
+    "url": "https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=zh-CN",
+    "button": [
+      {
+        "text": "添加至 Chrome",
+        "x": 1030,
+        "y": 262,
+        "w": 146,
+        "h": 40
+      }
+    ],
+    "warnings": null
+  },
+  "edgeSearch": [
+    {
+      "text": "",
+      "x": 629,
+      "y": 11,
+      "w": 546,
+      "h": 30
+    },
+    {
+      "text": "篡改猴",
+      "x": 569,
+      "y": 212,
+      "w": 247,
+      "h": 22
+    }
+  ]
+}
