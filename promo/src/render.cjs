@@ -14,7 +14,7 @@ const REPO = 'github.com/yile2020/helper-scripts';
 const SEARCH = 'yile2020/helper-scripts';
 // 脚本猫（国内备用安装）页面地址。上线并核对后填在这里（或用环境变量 SCRIPTCAT_URL），
 // 图 1、8、10 会自动加上国内备用地址；留空则不显示。
-const SCRIPTCAT = process.env.SCRIPTCAT_URL || '';
+const SCRIPTCAT = process.env.SCRIPTCAT_URL ?? 'https://scriptcat.org/zh-CN/script-show-page/9185'; // 2026-11-21 发布，审核中
 const SC_SHOW = SCRIPTCAT.replace(/^https?:\/\//, '');
 let TOTAL = 0; // 运行时取 slides.length
 
@@ -41,7 +41,7 @@ function shot(file, { label, w = 960, todo, h = 250 }) {
 const tips = (items, head = '💡 小贴士') =>
     `<div class="tips"><div class="tips-h">${head}</div><ul>${items.map((t) => `<li>${t}</li>`).join('')}</ul></div>`;
 const pill = (t, cls = '') => `<span class="pill ${cls}">${t}</span>`;
-const addr = (t) => `<div class="addr"><span class="addr-k">地址栏输入</span><span class="addr-v">${esc(t)}</span></div>`;
+const addr = (t) => `<div class="addr${t.length > 34 ? ' long' : ''}"><span class="addr-k">地址栏输入</span><span class="addr-v">${esc(t)}</span></div>`;
 
 const THEMES = { mint: '#19B88A', violet: '#6C5CE7', orange: '#FF8A00', coral: '#FF4D2E', sun: '#FFC21A' };
 
@@ -71,7 +71,7 @@ function frame({ n, step, title, browser, route, body, theme }) {
 const slides = [];
 
 // 脚本猫地址还没有时，用橙色「待补」占位，并让页脚显示「含待替换」
-const SC_AUTHOR = process.env.SCRIPTCAT_AUTHOR || '';
+const SC_AUTHOR = process.env.SCRIPTCAT_AUTHOR ?? 'yile2020';
 const scAddr = () => SCRIPTCAT
     ? addr(SC_SHOW)
     : `<div class="addr todo-addr"><span class="addr-k">地址栏输入</span><span class="addr-v">脚本猫地址（发布后补）</span></div>`;
@@ -203,7 +203,7 @@ slides.push((n) => frame({
         + shot('08a-scriptcat-home.png', { label: '认准网站：ScriptCat 脚本猫', w: 860 })
         + shot('08b-scriptcat-page.png', { w: 960, h: 300, todo: '脚本猫上的研修助手页面（圈出安装按钮）' })
         + tips([
-            '用上面的地址<b>直接打开</b>，别在站内搜：搜出来的同类脚本很多，容易装错',
+            '用上面的地址<b>直接打开</b>，别在站内搜：同类脚本很多，容易装错',
             `认准脚本名：<b>${NAME}</b>${SC_AUTHOR ? `，作者 <b>${esc(SC_AUTHOR)}</b>` : ''}`,
             '从这里装的，以后也从脚本猫自动更新',
         ]),
@@ -302,7 +302,9 @@ main{flex:1;display:flex;flex-direction:column;align-items:center;gap:30px;min-h
 .todo-file{margin-top:12px;font-size:20px;color:#A0602A;font-family:monospace}
 .addr{display:flex;align-items:center;gap:16px;background:var(--sun);border:4px solid var(--ink);border-radius:999px;padding:12px 30px 12px 14px;font-size:34px;box-shadow:6px 6px 0 var(--ink)}
 .addr-k{background:var(--ink);color:var(--sun);font-weight:900;font-size:24px;border-radius:999px;padding:6px 16px}
-.addr-v{font-weight:900;letter-spacing:.3px}
+.addr-v{font-weight:900;letter-spacing:.3px;white-space:nowrap}
+.addr-k{flex:none;white-space:nowrap}
+.addr.long{font-size:30px}
 .todo-addr{background:repeating-linear-gradient(45deg,#FFF0D9 0 18px,#FFE4BD 18px 36px);border-style:dashed;border-color:var(--coral)}
 .todo-addr .addr-v{color:#B34700}
 .tips{align-self:stretch;position:relative;background:#fff;border:4px solid var(--ink);border-radius:24px;box-shadow:10px 10px 0 var(--ink);padding:34px 30px 22px;margin-top:10px}
