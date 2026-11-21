@@ -7,90 +7,96 @@ const SCRIPT = path.join(__dirname, '..', 'gzwy-course-autonext.user.js')
 const FIXTURES = path.join(__dirname, 'fixtures')
 const TOPIC_URL = '/topic.html#/pc/nc/pagespecial/specialDetail?id=28c0ade8b77e42ac821863d958ade8c8'
 const PANEL = '#gzwy-course-autonext-panel'
-const K = { enabled: 'gzwy-course-autonext-enabled', keepAlive: 'gzwy-course-autonext-keepalive', active: 'gzwy-course-autonext-active' }
+const P = 'gzwy-course-autonext-'
+const K = { enabled: P + 'enabled', keepAlive: P + 'keepalive', list: P + 'list', owner: P + 'owner' }
+
+// rows 是 [businessId, progress, typeValue?]
+const cacheRows = rows => rows.map(([id, progress, type]) => ({
+    id, name: '课程 ' + id, type: type || 'course', typeText: type === 'exam' ? '考试' : '课程', progress, playState: true, classId: 'class-1',
+}))
 
 ;(async () => {
     const env = await h.setup(FIXTURES)
     const t = h.createRunner('gzwy-course-autonext')
     const { assert, eq } = t
 
-    const gmActive = page => page.evaluate(() => JSON.parse(localStorage.getItem('__gm:gzwy-course-autonext-active') || '""'))
     const status = page => page.$eval(PANEL + ' [data-status]', el => el.textContent)
-    const nudge = page => page.evaluate(() => { window.dispatchEvent(new CustomEvent('gzwy-course-autonext-check')) })
+    const info = page => page.$eval(PANEL + ' [data-info]', el => el.textContent)
+    const waitStatus = (page, text) => page.waitForFunction(
+        ([sel, text]) => document.querySelector(sel).textContent.includes(text), [PANEL + ' [data-status]', text], { timeout: 9000 })
 
-    // 专题页：rows 是 [businessId, progress, typeValue?]；refreshTo 给出 initData 之后的进度。
+    // 页面里按站点的数据结构造课程列表
+    const makeLists = `(rows => [{ classId: 'class-1', subList: rows.map(([businessId, progress, typeValue]) => ({
+        businessId, name: '课程 ' + businessId, progress, playState: true,
+        typeValue: typeValue || 'course', typeText: typeValue === 'exam' ? '考试' : '课程' })) }])`
+
     async function openTopic(values, rows, options = {}) {
         const context = await env.browser.newContext()
         const page = await context.newPage()
-        await h.install(page, SCRIPT, { values: { [K.enabled]: false, [K.keepAlive]: false, [K.active]: '', ...values } })
+        await h.install(page, SCRIPT, { values: { [K.enabled]: false, [K.keepAlive]: false, ...values } })
         await page.goto(env.base + TOPIC_URL)
-        await page.evaluate(({ rows, refreshTo, projectSignature }) => {
-            const make = list => list.map(([businessId, progress, typeValue]) => ({
-                businessId, name: '课程 ' + businessId, progress, playState: true,
-                typeValue: typeValue || 'course', typeText: typeValue === 'exam' ? '考试' : '课程',
-            }))
-            const group = { classId: 'class-1', subList: make(rows) }
+        await page.evaluate(({ rows, projectSignature, makeLists }) => {
             window.__entered = []
             window.__refreshed = 0
-            const enter = item => window.__entered.push(item.businessId)
+            const lists = eval(makeLists)(rows)
             // 项目版与站点 dsf-pc.js 的检查一致：第二个参数不是课程行时提示「不在学习时间范围」。
             const clickEnter = projectSignature
                 ? function (e, t, s, a, i, n, o) {
                     if (!t || !t.playState) { window.__toast = '不在学习时间范围'; return }
-                    window.__call = { groupFirst: e === vm.lists[0], classId: s, groupFourth: a === vm.lists[0], index: i, previous: n, flag: o === undefined ? null : o }
-                    enter(t)
+                    window.__call = { groupFirst: e === lists[0], classId: s, groupFourth: a === lists[0], index: i, previous: n, flag: o === undefined ? null : o }
+                    window.__entered.push(t.businessId)
                 }
-                : function (item) { enter(item) }
-            const vm = {
-                lists: [group], showClick: true, clickEnter,
-                $options: { methods: { clickEnter } },
-                $parent: {
-                    initData() {
-                        window.__refreshed++
-                        if (refreshTo) vm.lists = [{ classId: 'class-1', subList: make(refreshTo) }]
-                    },
-                },
+                : function (item) { window.__entered.push(item.businessId) }
+            document.body.__vue__ = {
+                lists, showClick: true, clickEnter, $options: { methods: { clickEnter } },
+                $parent: { initData() { window.__refreshed++ } },
             }
-            document.body.__vue__ = vm
-        }, { rows, refreshTo: options.refreshTo || null, projectSignature: options.projectSignature === true })
+        }, { rows, projectSignature: options.projectSignature === true, makeLists })
         await page.waitForSelector(PANEL)
         return { context, page }
     }
 
-    // 播放页：rates 是各课件的 finishedRate。
-    async function openPlayer(values, rates) {
+    // 课程页 c1：rates 是各课件的 finishedRate，rows 是平台接口返回的专题列表
+    async function openPlayer(values, rates, rows) {
         const context = await env.browser.newContext()
         const page = await context.newPage()
-        await h.install(page, SCRIPT, { values: { [K.enabled]: true, [K.keepAlive]: false, [K.active]: 'c1', ...values } })
-        await page.goto(env.base + '/player.html#/pc/nc/pagecourse/coursePlayer?id=c1')
-        await page.evaluate(rates => {
+        await h.install(page, SCRIPT, { values: { [K.enabled]: true, [K.keepAlive]: false, ...values } })
+        await page.goto(env.base + '/player.html#/pc/nc/pagecourse/coursePlayer?id=c1&classid=class-1&type=ztb')
+        await page.evaluate(({ rates, rows, makeLists }) => {
             const children = rates.map((finishedRate, index) => ({ id: 'w' + index, finishedRate }))
             // 与真实站点一致：最后一段播完后站点已把当前课件绕回第一段，只能看完成度。
             document.body.__vue__ = { queryiId: 'c1', curPlayItem: children[0], chapterInfo: { children } }
-            window.__nudged = 0; window.__played = 0; window.__paused = 0; window.__moved = 0; window.__visibility = 0
-            const opener = { closed: false, CustomEvent, dispatchEvent(event) { if (event.type === 'gzwy-course-autonext-check') window.__nudged++ } }
-            Object.defineProperty(window, 'opener', { configurable: true, value: opener })
+            window.__listCalls = 0; window.__played = 0; window.__moved = 0; window.__visibility = 0
+            window.dsf = { http: { get(url, params) {
+                window.__listCalls++
+                window.__listRequest = { url, id: params.id }
+                const chain = {
+                    done(cb) { setTimeout(() => cb({ success: true, data: eval(makeLists)(rows) }), 20); return chain },
+                    error() { return chain },
+                }
+                return chain
+            } } }
             // fixture 的 video 没有片源，一直是 paused，用假的 play() 计数。
-            const video = document.getElementById('lesson')
-            video.play = () => { window.__played++; return Promise.resolve() }
+            document.getElementById('lesson').play = () => { window.__played++; return Promise.resolve() }
             document.onmousemove = () => { window.__moved++ }
             document.addEventListener('visibilitychange', () => { window.__visibility++ })
             document.dispatchEvent(new Event('visibilitychange'))
-        }, rates)
+        }, { rates, rows, makeLists })
         await page.waitForSelector(PANEL)
         return { context, page }
     }
 
     // ---------- 专题页 ----------
 
-    await t.test('点开始：进入第一门未完成课程并记为正在学', async () => {
+    await t.test('点开始：进入第一门未完成课程，面板显示专题进度', async () => {
         const { context, page } = await openTopic({}, [['c1', 100], ['c2', 0], ['c3', 0]])
         try {
             await page.click(PANEL + ' [data-actions] button')
             eq(JSON.stringify(await page.evaluate(() => window.__entered)), '["c2"]')
-            eq(await gmActive(page), 'c2')
             eq(await page.$eval(PANEL + ' [data-enabled]', input => input.checked), true)
-            assert((await status(page)).includes('课程 c2'), '状态里没有课程名')
+            const text = await info(page)
+            assert(text.includes('1 / 3 门完成'), '面板没有专题进度：' + text)
+            assert(text.includes('从专题页进入《课程 c2》'), '面板没有最近动作：' + text)
             assert((await h.errors(page)).length === 0, '专题页有未捕获异常')
         } finally { await context.close() }
     })
@@ -106,109 +112,102 @@ const K = { enabled: 'gzwy-course-autonext-enabled', keepAlive: 'gzwy-course-aut
         } finally { await context.close() }
     })
 
-    await t.test('正在学的课程刷新后记满 100%：自动进入下一门', async () => {
-        const { context, page } = await openTopic({ [K.enabled]: true, [K.active]: 'c2' },
-            [['c1', 100], ['c2', 60], ['c3', 0]], { refreshTo: [['c1', 100], ['c2', 100], ['c3', 0]] })
-        try {
-            await nudge(page)
-            await page.waitForFunction(() => window.__entered.length > 0, null, { timeout: 8000 })
-            eq(JSON.stringify(await page.evaluate(() => window.__entered)), '["c3"]')
-            eq(await gmActive(page), 'c3')
-            assert(await page.evaluate(() => window.__refreshed) >= 1, '没有刷新专题列表')
-            assert((await h.errors(page)).length === 0, '专题页有未捕获异常')
-        } finally { await context.close() }
-    })
-
-    await t.test('正在学的课程还没记满：不切，状态显示当前进度', async () => {
-        const { context, page } = await openTopic({ [K.enabled]: true, [K.active]: 'c2' }, [['c1', 100], ['c2', 60], ['c3', 0]])
-        try {
-            await nudge(page)
-            await page.waitForFunction(sel => document.querySelector(sel).textContent.includes('60%'), PANEL + ' [data-status]', { timeout: 8000 })
-            eq(JSON.stringify(await page.evaluate(() => window.__entered)), '[]')
-            eq(await gmActive(page), 'c2')
-        } finally { await context.close() }
-    })
-
-    await t.test('开关关闭时不切', async () => {
-        const { context, page } = await openTopic({ [K.enabled]: false, [K.active]: 'c1' }, [['c1', 100], ['c2', 0]])
-        try {
-            await nudge(page)
-            await page.waitForTimeout(4000)
-            eq(JSON.stringify(await page.evaluate(() => window.__entered)), '[]')
-        } finally { await context.close() }
-    })
-
-    await t.test('下一项是考试：不进入，停止盯进度', async () => {
-        const { context, page } = await openTopic({ [K.enabled]: true, [K.active]: 'c1' }, [['c1', 100], ['c2', 0, 'exam'], ['c3', 0]])
-        try {
-            await nudge(page)
-            await page.waitForFunction(sel => document.querySelector(sel).textContent.includes('考试'), PANEL + ' [data-status]', { timeout: 8000 })
-            eq(JSON.stringify(await page.evaluate(() => window.__entered)), '[]')
-            eq(await gmActive(page), '')
-        } finally { await context.close() }
-    })
-
-    await t.test('全部学完：提示没有未完成课程', async () => {
-        const { context, page } = await openTopic({ [K.enabled]: true, [K.active]: 'c2' }, [['c1', 100], ['c2', 100]])
-        try {
-            await nudge(page)
-            await page.waitForFunction(sel => document.querySelector(sel).textContent.includes('没有未完成课程'), PANEL + ' [data-status]', { timeout: 8000 })
-            eq(await gmActive(page), '')
-        } finally { await context.close() }
-    })
-
-    await t.test('「重新打开」按钮再次进入正在学的课程', async () => {
-        const { context, page } = await openTopic({}, [['c1', 0], ['c2', 0]])
+    await t.test('下一项是考试：专题页不进入', async () => {
+        const { context, page } = await openTopic({}, [['c1', 100], ['c2', 0, 'exam']])
         try {
             await page.click(PANEL + ' [data-actions] button')
-            await page.click(PANEL + ' [data-actions] button')
-            eq(JSON.stringify(await page.evaluate(() => window.__entered)), '["c1","c1"]')
+            eq(JSON.stringify(await page.evaluate(() => window.__entered)), '[]')
+            assert((await status(page)).includes('考试'), '状态没有提示考试')
         } finally { await context.close() }
     })
 
-    // ---------- 播放页 ----------
-
-    await t.test('课件全部记满：通知专题页检查（当前课件已被站点绕回第一段）', async () => {
-        const { context, page } = await openPlayer({}, [100, 100, 100])
+    await t.test('课程页核对到新进度后，专题页刷新自己的课程列表', async () => {
+        const { context, page } = await openTopic(
+            { [K.list]: { courses: cacheRows([['c1', 100], ['c2', 100], ['c3', 0]]), at: Date.now() + 60000 } },
+            [['c1', 100], ['c2', 60], ['c3', 0]])
         try {
-            await page.waitForFunction(() => window.__nudged > 0, null, { timeout: 9000 })
-            assert((await status(page)).includes('全部完成'), '状态没有提示课件已完成')
-            assert((await h.errors(page)).length === 0, '播放页有未捕获异常')
+            await page.waitForFunction(() => window.__refreshed === 1, null, { timeout: 9000 })
+            await page.waitForTimeout(5500)
+            eq(await page.evaluate(() => window.__refreshed), 1)
+            assert((await info(page)).includes('2 / 3 门完成'), '面板没有用缓存的进度')
         } finally { await context.close() }
     })
 
-    await t.test('还有课件没记满 / 开关关闭：不通知', async () => {
-        const a = await openPlayer({}, [100, 60])
-        const b = await openPlayer({ [K.enabled]: false }, [100, 100])
+    // ---------- 课程页 ----------
+
+    await t.test('平台记满 100%：本页直接进入下一门（当前课件已被站点绕回第一段）', async () => {
+        const { context, page } = await openPlayer({}, [100, 100, 100], [['c1', 100], ['c2', 0], ['c3', 0]])
         try {
-            await a.page.waitForTimeout(6500)
-            eq(await a.page.evaluate(() => window.__nudged), 0)
-            eq(await b.page.evaluate(() => window.__nudged), 0)
+            await page.waitForURL(url => url.hash.includes('id=c2'), { timeout: 12000 })
+            // 脚本改完地址会紧接着刷新页面，等刷新完再读。
+            await page.waitForTimeout(1500)
+            await page.waitForLoadState('load')
+            eq(await page.evaluate(() => location.hash), '#/pc/nc/pagecourse/coursePlayer?id=c2&classid=class-1&type=ztb')
+            await page.waitForSelector(PANEL)
+            assert((await info(page)).includes('《课程 c1》已完成，进入《课程 c2》'), '跳转后面板没有保留最近动作')
+            assert((await h.errors(page)).length === 0, '课程页有未捕获异常')
+        } finally { await context.close() }
+    })
+
+    await t.test('课件看完但平台还没记满：不跳，面板显示课件与平台进度', async () => {
+        const { context, page } = await openPlayer({}, [100, 100], [['c1', 80], ['c2', 0]])
+        try {
+            await waitStatus(page, '平台记录 80%')
+            const text = await info(page)
+            assert(text.includes('0 / 2 门完成'), '没有专题进度：' + text)
+            assert(text.includes('《课程 c1》平台记录 80%'), '没有正在学：' + text)
+            assert(text.includes('下一门《课程 c2》'), '没有下一门：' + text)
+            assert(text.includes('2 / 2 段完成'), '没有课件进度：' + text)
+            eq(JSON.stringify(await page.evaluate(() => window.__listRequest)),
+                JSON.stringify({ url: '/nc/class/course/list', id: '28c0ade8b77e42ac821863d958ade8c8' }))
+            await page.waitForTimeout(3000)
+            assert(await page.evaluate(() => location.hash.includes('id=c1')), '不该跳转')
+        } finally { await context.close() }
+    })
+
+    await t.test('开关关闭：不核对、不跳，但仍显示课件进度', async () => {
+        const { context, page } = await openPlayer({ [K.enabled]: false }, [100, 60], [['c1', 100], ['c2', 0]])
+        try {
+            await page.waitForFunction(sel => document.querySelector(sel).textContent.includes('1 / 2 段完成'), PANEL + ' [data-info]', { timeout: 9000 })
+            await page.waitForTimeout(3000)
+            eq(await page.evaluate(() => window.__listCalls), 0)
+            assert(await page.evaluate(() => location.hash.includes('id=c1')), '不该跳转')
+        } finally { await context.close() }
+    })
+
+    await t.test('下一项是考试 / 全部学完：不跳并说明', async () => {
+        const a = await openPlayer({}, [100], [['c1', 100], ['c2', 0, 'exam'], ['c3', 0]])
+        const b = await openPlayer({}, [100], [['c1', 100], ['c2', 100]])
+        try {
+            await waitStatus(a.page, '考试')
+            await waitStatus(b.page, '没有未完成课程')
+            await a.page.waitForTimeout(6000)
+            assert(await a.page.evaluate(() => location.hash.includes('id=c1')), '不该跳转')
+            eq(await a.page.evaluate(() => window.__listCalls), 1)
         } finally { await a.context.close(); await b.context.close() }
     })
 
-    await t.test('专题页已切到别的课程：本页停播、不再保活', async () => {
-        const { context, page } = await openPlayer({ [K.active]: 'c2' }, [100, 100])
+    await t.test('另一个课程页正在负责续课：本页不跳', async () => {
+        const { context, page } = await openPlayer({ [K.owner]: { tab: 'other-tab', at: Date.now() + 60000 } }, [100], [['c1', 100], ['c2', 0]])
         try {
-            await page.waitForFunction(sel => document.querySelector(sel).textContent.includes('已停止播放'), PANEL + ' [data-status]', { timeout: 9000 })
-            await page.waitForTimeout(5500)
-            eq(await page.evaluate(() => window.__played), 0)
-            eq(await page.evaluate(() => window.__nudged), 0)
+            await waitStatus(page, '另一个课程页')
+            eq(await page.evaluate(() => window.__listCalls), 0)
+            assert(await page.evaluate(() => location.hash.includes('id=c1')), '不该跳转')
         } finally { await context.close() }
     })
 
     await t.test('后台保活开启：拦下 visibilitychange、重置无操作计时、暂停后续播', async () => {
-        const { context, page } = await openPlayer({ [K.keepAlive]: true }, [100, 60])
+        const { context, page } = await openPlayer({ [K.keepAlive]: true }, [100, 60], [['c1', 60], ['c2', 0]])
         try {
             await page.waitForFunction(() => window.__played > 0 && window.__moved > 0, null, { timeout: 9000 })
             eq(await page.evaluate(() => window.__visibility), 0)
             eq(await page.evaluate(() => document.hidden), false)
-            assert((await h.errors(page)).length === 0, '播放页有未捕获异常')
+            assert((await h.errors(page)).length === 0, '课程页有未捕获异常')
         } finally { await context.close() }
     })
 
     await t.test('后台保活关闭：不拦事件、不续播', async () => {
-        const { context, page } = await openPlayer({}, [100, 60])
+        const { context, page } = await openPlayer({}, [100, 60], [['c1', 60], ['c2', 0]])
         try {
             await page.waitForTimeout(6500)
             eq(await page.evaluate(() => window.__played), 0)
@@ -218,7 +217,7 @@ const K = { enabled: 'gzwy-course-autonext-enabled', keepAlive: 'gzwy-course-aut
     })
 
     await t.test('平台弹出验证/答题窗口时保活不续播', async () => {
-        const { context, page } = await openPlayer({ [K.keepAlive]: true }, [100, 60])
+        const { context, page } = await openPlayer({ [K.keepAlive]: true }, [100, 60], [['c1', 60], ['c2', 0]])
         try {
             await page.evaluate(() => {
                 const dialog = document.createElement('div')
@@ -226,7 +225,7 @@ const K = { enabled: 'gzwy-course-autonext-enabled', keepAlive: 'gzwy-course-aut
                 dialog.textContent = '扫一扫人脸识别'
                 document.body.append(dialog)
             })
-            await page.waitForFunction(sel => document.querySelector(sel).textContent.includes('手动处理'), PANEL + ' [data-status]', { timeout: 9000 })
+            await waitStatus(page, '手动处理')
             await page.evaluate(() => { window.__played = 0 })
             await page.waitForTimeout(5500)
             eq(await page.evaluate(() => window.__played), 0)
@@ -234,7 +233,7 @@ const K = { enabled: 'gzwy-course-autonext-enabled', keepAlive: 'gzwy-course-aut
     })
 
     await t.test('「是否继续学习」弹窗自动点确认', async () => {
-        const { context, page } = await openPlayer({ [K.keepAlive]: true }, [100, 60])
+        const { context, page } = await openPlayer({ [K.keepAlive]: true }, [100, 60], [['c1', 60], ['c2', 0]])
         try {
             await page.evaluate(() => {
                 const box = document.createElement('div')
@@ -244,6 +243,15 @@ const K = { enabled: 'gzwy-course-autonext-enabled', keepAlive: 'gzwy-course-aut
                 document.body.append(box)
             })
             await page.waitForFunction(() => window.__confirmed === true, null, { timeout: 9000 })
+        } finally { await context.close() }
+    })
+
+    await t.test('自动跳转后的课程页没开保活也会尝试开播', async () => {
+        const { context, page } = await openPlayer(
+            { [P + 'autostart']: { courseId: 'c1', at: Date.now() } }, [0, 0], [['c1', 0], ['c2', 0]])
+        try {
+            await page.waitForFunction(() => window.__played > 0, null, { timeout: 9000 })
+            eq(await page.evaluate(() => window.__moved), 0)
         } finally { await context.close() }
     })
 
