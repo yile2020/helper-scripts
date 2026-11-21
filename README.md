@@ -37,7 +37,7 @@
 
 1. **安装脚本管理器 Tampermonkey**（篡改猴）：[Chrome](https://chromewebstore.google.com/detail/dhdgffkkebhmkfjojejmpbldmpobfkfo) · [Edge](https://microsoftedge.microsoft.com/addons/detail/iikmkjmpaadaobahmlepeloendndfphd) · [Firefox](https://addons.mozilla.org/firefox/addon/tampermonkey/) · [官网](https://www.tampermonkey.net/)
 2. **Chrome / Edge 用户多做一步**：打开扩展管理页 → Tampermonkey「详细信息」→ 打开「允许用户脚本」（旧版浏览器是打开右上角的「开发者模式」）。不开的话脚本不会运行。
-3. **在下面的表格里点「安装」**，在弹出的页面点「安装」，然后刷新要用的网页即可。
+3. **在下面的表格里点「安装」**，在弹出的页面点「安装」，然后刷新要用的网页即可。安装链接打不开的话，研修助手可以改从 [脚本猫国内备用地址](https://scriptcat.org/zh-CN/script-show-page/9185) 安装。
 
 > 其他脚本管理器（Violentmonkey、ScriptCat 等）一般也能用，但没有专门测试过。
 
@@ -58,6 +58,8 @@
 > 国家中小学智慧教育平台（`basic.smartedu.cn`）· 2026 年「暑期教师研修」专题（基础教育）· **本仓库使用人数最多的脚本**
 >
 > **[👉 点击安装](https://raw.githubusercontent.com/yile2020/helper-scripts/main/smartedu-2026-basic/smartedu-2026-basic.user.js)** · [平台调研与开发笔记](./smartedu-2026-basic/notes.md)
+>
+> 🇨🇳 **上面的安装链接打不开？** 用国内备用地址：[脚本猫 · 研修助手](https://scriptcat.org/zh-CN/script-show-page/9185)，打开后点「安装脚本」。两边是同一个脚本，装一个就行；从脚本猫装的也会从脚本猫自动更新。
 
 **能做什么**
 
