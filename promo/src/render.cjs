@@ -5,7 +5,8 @@
 // 你实拍完，把截图按下面 SHOT 名称存进 promo/shots/，再跑一次本脚本即可。
 const path = require('path');
 const fs = require('fs');
-const { chromium } = require('playwright');
+// 默认用 Ego 出图：先用 HTML_DIR=<目录> 只导出每张图的 HTML，再由 promo/src/render-ego.sh 在 Ego 里截图。
+// 不设 HTML_DIR 时仍可用 Playwright（需要 NODE_PATH 指向装了 playwright 的 node_modules）。
 
 const ROOT = path.join(__dirname, '..');
 const SHOTS = path.join(ROOT, 'shots');
@@ -14,7 +15,7 @@ const REPO = 'github.com/yile2020/helper-scripts';
 const SEARCH = 'yile2020/helper-scripts';
 // 脚本猫（国内备用安装）页面地址。上线并核对后填在这里（或用环境变量 SCRIPTCAT_URL），
 // 图 1、8、10 会自动加上国内备用地址；留空则不显示。
-const SCRIPTCAT = process.env.SCRIPTCAT_URL ?? 'https://scriptcat.org/zh-CN/script-show-page/9185'; // 2026-11-21 发布，审核中
+const SCRIPTCAT = process.env.SCRIPTCAT_URL ?? 'https://scriptcat.org/zh-CN/script-show-page/9185'; // 2026-11-21 发布，已审核通过
 const SC_SHOW = SCRIPTCAT.replace(/^https?:\/\//, '');
 let TOTAL = 0; // 运行时取 slides.length
 
@@ -41,7 +42,9 @@ function shot(file, { label, w = 960, todo, h = 250 }) {
 const tips = (items, head = '💡 小贴士') =>
     `<div class="tips"><div class="tips-h">${head}</div><ul>${items.map((t) => `<li>${t}</li>`).join('')}</ul></div>`;
 const pill = (t, cls = '') => `<span class="pill ${cls}">${t}</span>`;
-const addr = (t) => `<div class="addr${t.length > 34 ? ' long' : ''}"><span class="addr-k">地址栏输入</span><span class="addr-v">${esc(t)}</span></div>`;
+const addr = (t, k = '地址栏输入') => `<div class="addr${t.length > 34 ? ' long' : ''}"><span class="addr-k">${esc(k)}</span><span class="addr-v">${esc(t)}</span></div>`;
+// 小红书对站外链接敏感：图里不印 github.com / scriptcat.org 网址，只写「去哪里搜什么」
+const SC_SEARCH = '2026暑期教师研修自动连播助手';
 
 const THEMES = { mint: '#19B88A', violet: '#6C5CE7', orange: '#FF8A00', coral: '#FF4D2E', sun: '#FFC21A' };
 
@@ -80,8 +83,7 @@ const NAME = '2026年暑期教师研修｜国家中小学智慧教育平台｜�
 
 // 01 封面
 slides.push(() => {
-    const panel = fs.existsSync(path.join(SHOTS, '09-panel.png'))
-        ? shot('09-panel.png', { w: 400 }) : '';
+    const panel = ''; //实拍面板只放在图10，避免封面溢出
     return `<div class="page cover">
       <i class="blob c1"></i><i class="blob c2"></i><i class="blob c3"></i>
       <div class="cover-top"><span class="tag-w">国家中小学智慧教育平台 · 2026 暑期教师研修</span></div>
@@ -104,7 +106,7 @@ slides.push(() => {
       </div>
       <div class="chips cover-chips">${pill('💻 电脑端')}${pill('Edge / Chrome')}${pill('非平台官方')}</div>
       <div class="cover-foot">完整说明 → GitHub 搜 <b>${SEARCH}</b>
-        <div class="sc">国内备用 → 脚本猫 ${SCRIPTCAT ? `<b class="nw">${esc(SC_SHOW)}</b>` : '（地址见最后一张）'}</div></div>
+        <div class="sc">国内备用 → 脚本猫搜作者 <b class="nw">${esc(SC_AUTHOR)}</b></div></div>
     </div>`;
 });
 
@@ -138,7 +140,6 @@ slides.push((n) => frame({
     n, step: '第 1 步', browser: 'Edge 用户', title: '安装扩展「篡改猴」',
     body: addr('microsoftedge.microsoft.com/addons')
         + shot('03a-edge-search.png', { label: '① 搜索「篡改猴」 ② 认准第一个，开发者 Jan Biniok' })
-        + shot('04c-edge-get.png', { w: 960, h: 300, todo: '真实 Edge 里：篡改猴的「获取」按钮，以及点击后弹出的确认框（圈出要点的按钮）' })
         + tips([
             '点<b>「获取」</b>，弹出确认框后再点一次添加',
             '篡改猴就是 Tampermonkey；能打开 GitHub 的，也可以从 README「快速开始」里点 Edge 直达',
@@ -150,7 +151,6 @@ slides.push((n) => frame({
     n, step: '第 1 步', browser: 'Chrome 用户', title: '安装扩展「篡改猴」',
     body: addr('chromewebstore.google.com')
         + shot('05b-chrome-store.png', { label: '搜索「篡改猴」，认准这个', w: 620 })
-        + shot('05c-chrome-add.png', { w: 960, h: 300, todo: '真实 Chrome 里：「添加至 Chrome」按钮，以及点击后弹出的确认框（圈出要点的按钮）' })
         + tips([
             '点<b>「添加至 Chrome」</b>，确认框里再点一次添加',
             '⚠ Chrome 应用商店<b>在国内经常打不开</b>，打不开就用 Edge（Windows 自带），看上一张',
@@ -161,11 +161,11 @@ slides.push((n) => frame({
 slides.push((n) => frame({
     n, step: '第 2 步', browser: 'Edge 用户', title: '打开「允许用户脚本」',
     body: addr('edge://extensions')
-        + shot('06-edge-extensions.png', { w: 960, h: 560, todo: '真实 Edge：扩展页 → 篡改猴「详细信息」→「允许用户脚本」开关（打开状态）。<br>如果你的 Edge 没有这个开关，改拍扩展页的「开发人员模式」开关。<br><b>开关名称以实拍为准，并同步改下方文字</b>' })
+ + shot('06-edge-extensions.png', { label: 'Edge扩展页实拍：找到篡改猴，点「详细信息」', w:960 })
         + tips([
             '把上面的地址<b>复制</b>到地址栏，回车',
-            '找到篡改猴，点「详细信息」',
-            '打开「允许用户脚本」',
+            '如果扩展卡片处于关闭状态，先打开卡片上的开关',
+            '点「详细信息」→打开「允许用户脚本」；开关位置可看下一张的真实详情页',
             '⚠ <b>不开这一项，脚本装了也不会运行</b>',
         ]),
 }));
@@ -174,7 +174,7 @@ slides.push((n) => frame({
 slides.push((n) => frame({
     n, step: '第 2 步', browser: 'Chrome 用户', title: '打开「允许用户脚本」',
     body: addr('chrome://extensions')
-        + shot('07-chrome-extensions.png', { w: 960, h: 560, todo: '真实 Chrome：扩展页 → 篡改猴「详情」→「允许用户脚本」开关（打开状态）。<br><b>开关名称以实拍为准，并同步改下方文字</b>' })
+ + shot('07-chrome-extensions.png', { label: '真实详情页：「允许用户脚本」已打开', w:960 })
         + tips([
             '把上面的地址<b>复制</b>到地址栏，回车',
             '找到篡改猴，点「详情」，打开「允许用户脚本」',
@@ -186,7 +186,7 @@ slides.push((n) => frame({
 // 07 方式 A：GitHub
 slides.push((n) => frame({
     n, step: '第 3 步', route: 'A', title: '从 GitHub 安装',
-    body: addr(REPO)
+    body: addr(SEARCH, 'GitHub 搜索')
         + shot('02-repo-top.png', { label: '实拍 · 仓库首页，认准 yile2020 / helper-scripts', w: 860 })
         + shot('03b-readme-smartedu.png', { label: '往下翻找到研修助手，点「👉 点击安装」' })
         + tips([
@@ -199,10 +199,10 @@ slides.push((n) => frame({
 // 08 方式 B：脚本猫
 slides.push((n) => frame({
     n, step: '第 3 步', route: 'B', title: '从脚本猫安装（国内）',
-    body: scAddr()
+    body: addr(SC_SEARCH, '脚本猫搜索')
         + shot('08b-scriptcat-page.png', { label: '① 认准脚本名和作者 yile2020 ② 点「安装脚本」', w: 960, h: 300, todo: '脚本猫上的研修助手页面（圈出安装按钮）' })
         + tips([
-            '用上面的地址<b>直接打开</b>，别在站内搜：同类脚本很多，容易装错',
+            '同类脚本很多，<b>一定认准作者 yile2020</b>，别装错',
             `认准脚本名：<b>${NAME}</b>${SC_AUTHOR ? `，作者 <b>${esc(SC_AUTHOR)}</b>` : ''}`,
             '从这里装的，以后也从脚本猫自动更新',
         ]),
@@ -211,11 +211,11 @@ slides.push((n) => frame({
 // 09 确认安装（两种方式相同）
 slides.push((n) => frame({
     n, step: '第 4 步', title: '在篡改猴安装页点「安装」',
-    body: shot('08-tm-install.png', { w: 960, h: 520, todo: '真实浏览器：点安装后，篡改猴打开的脚本安装页（能看到脚本名和「安装」按钮，圈出「安装」）' })
+ body: shot('08-tm-install.png', { label: '真实安装页：本机已装过，所以显示「重新安装」；首次安装显示「安装」', w:960 })
         + tips([
             '方式 A、B 点安装后，都会打开篡改猴的安装页',
             `核对脚本名：<br><b>${NAME}</b>`,
-            '点<b>「安装」</b>',
+            '首次安装点<b>「安装」</b>；已经装过才会显示「重新安装」',
             '⚠ 看到<b>满屏代码</b>？说明篡改猴没装好或没开开关，回到第 1、2 步',
         ]),
 }));
@@ -224,7 +224,7 @@ slides.push((n) => frame({
 slides.push((n) => frame({
     n, step: '第 5 步', title: '进研修页面，检查面板',
     body: `<div class="row">
-        ${shot('09-panel.png', { w: 470, h: 660, todo: '登录 basic.smartedu.cn，打开 2026 暑期教师研修专题，右侧「研修助手」面板完整截图<br><b>打码姓名、头像、单位</b>' })}
+ ${shot('09-panel.png', { label: '研修助手右侧面板实拍', w:470 })}
         <div class="check">
           <div class="check-h">看到这些就装好了 ✅</div>
           <ul>
@@ -250,13 +250,13 @@ slides.push((n) => frame({
     body: `<div class="faq">
         <div class="q"><em>Q</em><div><b>GitHub 或「点击安装」打不开</b><span>改用方式 B：从脚本猫安装（图 8）</span></div></div>
         <div class="q"><em>Q</em><div><b>点安装后满屏代码</b><span>篡改猴没装好，或第 2 步的开关没开</span></div></div>
-        <div class="q"><em>Q</em><div><b>装好了看不到面板</b><span>开关开了吗？篡改猴里研修助手启用了吗？网址是 basic.smartedu.cn 且已登录？刷新一下</span></div></div>
+        <div class="q"><em>Q</em><div><b>装好了看不到面板</b><span>开关开了吗？篡改猴里研修助手启用了吗？在智慧教育平台研修页面且已登录？刷新一下</span></div></div>
         <div class="q"><em>Q</em><div><b>视频自己停了，提示多处学习</b><span>同一账号只在一个地方学，关掉手机 App 和其他浏览器的学习页</span></div></div>
         <div class="q"><em>Q</em><div><b>还是不行</b><span>点面板「诊断」复制报告，发到 GitHub Issues，或评论说卡在第几张图</span></div></div>
       </div>
       <div class="gh">
-        <div class="gh-row"><span class="tag ta">A · GitHub</span><span class="gh-url">${REPO}</span></div>
-        <div class="gh-row"><span class="tag tb">B · 脚本猫</span><span class="gh-url">${scLine()}</span></div>
+        <div class="gh-row"><span class="tag ta">A · GitHub</span><span class="gh-url">GitHub 搜 ${esc(SEARCH)}</span></div>
+        <div class="gh-row"><span class="tag tb">B · 脚本猫</span><span class="gh-url">脚本猫搜作者 ${esc(SC_AUTHOR)}</span></div>
         <div class="gh-s">最新版 · 完整说明 · 问题反馈都在 GitHub</div>
       </div>
       <div class="note">个人维护的免费开源脚本，不是平台官方工具。学时以平台记录为准，不承诺任何结果，请遵守平台学习要求。脚本不收费，看到出售的不要买。</div>`,
@@ -387,16 +387,33 @@ footer .num{background:var(--sun);color:var(--ink);font-weight:900;border-radius
 const NAMES = ['01-封面', '02-两种方式怎么选', '03-Edge装篡改猴', '04-Chrome装篡改猴', '05-Edge允许用户脚本',
     '06-Chrome允许用户脚本', '07-方式A-GitHub安装', '08-方式B-脚本猫安装', '09-确认安装', '10-检查面板', '11-排查与地址'];
 
-(async () => {
-    const browser = await chromium.launch();
-    const page = await browser.newPage({ viewport: { width: 1080, height: 1440 } });
-    TOTAL = slides.length;
-    if (NAMES.length !== slides.length) throw new Error('NAMES 和 slides 数量不一致');
-    for (const f of fs.readdirSync(OUT)) if (/^图\d\d-.*\.png$/.test(f)) fs.unlinkSync(path.join(OUT, f)); // 清掉旧编号的图
-    for (let i = 0; i < slides.length; i++) {
-        const html = `<!doctype html><html><head><meta charset="utf-8">
+const pageHtml = (i) => `<!doctype html><html><head><meta charset="utf-8">
             <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&family=ZCOOL+QingKe+HuangYou&display=block" rel="stylesheet">
             <style>${CSS}</style></head><body>${slides[i](i + 1)}</body></html>`;
+
+(async () => {
+    TOTAL = slides.length;
+    if (NAMES.length !== slides.length) throw new Error('NAMES 和 slides 数量不一致');
+    if (process.env.HTML_DIR) {
+        const dir = process.env.HTML_DIR;
+        fs.mkdirSync(dir, { recursive: true });
+        const list = [];
+        for (let i = 0; i < slides.length; i++) {
+            const f = path.join(dir, `图${NAMES[i]}.html`);
+            fs.writeFileSync(f, pageHtml(i));
+            list.push({ html: f, png: path.join(OUT, `图${NAMES[i]}.png`) });
+        }
+        fs.writeFileSync(path.join(dir, 'list.json'), JSON.stringify(list, null, 1));
+        console.log(`wrote ${list.length} html files to ${dir}`);
+        return;
+    }
+    const { chromium } = require('playwright');
+    // PW_CHROMIUM_PATH：Playwright 自带浏览器版本对不上时，指定本机已有的 Chromium / Chrome 路径
+    const browser = await chromium.launch(process.env.PW_CHROMIUM_PATH ? { executablePath: process.env.PW_CHROMIUM_PATH } : {});
+    const page = await browser.newPage({ viewport: { width: 1080, height: 1440 } });
+    for (const f of fs.readdirSync(OUT)) if (/^图\d\d-.*\.png$/.test(f)) fs.unlinkSync(path.join(OUT, f)); // 清掉旧编号的图
+    for (let i = 0; i < slides.length; i++) {
+        const html = pageHtml(i);
         await page.setContent(html, { waitUntil: 'networkidle' });
         await page.evaluate(() => document.fonts.ready);
         const overflow = await page.evaluate(() => {
